@@ -7,7 +7,7 @@
     <div class="note-entry">
       <textarea
         :style="{ backgroundColor: colour }"
-        v-model="content"
+        v-model="noteProp.content"
       ></textarea>
       <div class="note-entry--actions">
         <div class="actions--swatches">
@@ -47,20 +47,25 @@ import "vue-swatches/dist/vue-swatches.min.css";
   },
   computed: {
     ...mapState(["notes", "show_note_entry"])
+  },
+  props: {
+    noteProp: {
+      type: Object,
+      required: true
+    }
   }
 })
 export default class NoteEntry extends Vue {
-  content: string = "";
-  colour: string = "#eeeeee";
-  id: number = 0;
+  noteProp: Note = this.noteProp;
+  colour: string = this.noteProp.colour;
   notes: Note[] = this.notes;
 
   // Save the note to storage
   saveNote() {
     store.dispatch("saveNote", {
-      content: this.content,
-      colour: this.colour,
-      id: this.notes.length + 1
+      id: this.noteProp.id,
+      content: this.noteProp.content,
+      colour: this.colour
     });
 
     this.closeEntry();
@@ -74,7 +79,7 @@ export default class NoteEntry extends Vue {
 
   // Reset the entry form
   resetEntry() {
-    this.content = "";
+    this.noteProp.content = "";
   }
 }
 </script>

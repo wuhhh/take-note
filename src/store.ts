@@ -7,7 +7,18 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     show_note_entry: false,
-    notes: <Note[]>[]
+    notes: <Note[]>[
+      {
+        id: 1,
+        content: "Hello!",
+        colour: "grey"
+      },
+      {
+        id: 2,
+        content: "What's up yo!",
+        colour: "green"
+      }
+    ]
   },
   mutations: {
     SET_SHOW_NOTE_ENTRY(state, val: boolean) {
@@ -16,12 +27,8 @@ export default new Vuex.Store({
     SAVE_NOTE(state, note: Note) {
       state.notes.push(note);
     },
-    SET_EDIT(state, val: boolean) {
-      state.edit = val;
-    },
-    SET_NOTE_TO_EDIT(state, id: number) {
-      state.edit_id = id;
-    }
+    SET_EDIT(state, val: boolean) {},
+    SET_NOTE_TO_EDIT(state, id: number) {}
   },
   actions: {
     setShowNoteEntry({ commit }, val: boolean) {
@@ -29,8 +36,10 @@ export default new Vuex.Store({
     },
     saveNote({ commit }, note: Note) {
       commit("SAVE_NOTE", note);
-    },
-    getNoteByID({ state }, id: number) {
+    }
+  },
+  getters: {
+    getNoteByID: state => id => {
       if (state.notes.length > 0) {
         return state.notes.find(note => note.id === id);
       } else {
