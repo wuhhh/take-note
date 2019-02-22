@@ -1,11 +1,14 @@
 <template>
   <div
     @click.self="closeEntry()"
-    :style="{ backgroundColor: colourAlpha }"
+    :style="{ backgroundColor: colour + '30' }"
     class="overlay"
   >
     <div class="note-entry">
-      <textarea :style="{ backgroundColor: colour }" v-model="note"></textarea>
+      <textarea
+        :style="{ backgroundColor: colour }"
+        v-model="content"
+      ></textarea>
       <div class="note-entry--actions">
         <div class="actions--swatches">
           <swatches
@@ -29,6 +32,7 @@
 import { Component, Vue } from "vue-property-decorator";
 import store from "@/store";
 import { mapState } from "vuex";
+import { Note } from "@/interfaces/my-interfaces";
 
 /**
  * Swatches
@@ -42,22 +46,19 @@ import "vue-swatches/dist/vue-swatches.min.css";
     Swatches
   },
   computed: {
-    ...mapState(["notes"]),
-    colourAlpha() {
-      return this.colour + "30";
-    }
+    ...mapState(["notes", "show_note_entry"])
   }
 })
 export default class NoteEntry extends Vue {
-  note: string = "";
+  content: string = "";
   colour: string = "#eeeeee";
-  id: number = 100;
-  notes: object[] = this.notes;
+  id: number = 0;
+  notes: Note[] = this.notes;
 
-  // Save the note to store
+  // Save the note to storage
   saveNote() {
     store.dispatch("saveNote", {
-      note: this.note,
+      content: this.content,
       colour: this.colour,
       id: this.notes.length + 1
     });
@@ -73,7 +74,7 @@ export default class NoteEntry extends Vue {
 
   // Reset the entry form
   resetEntry() {
-    this.note = "";
+    this.content = "";
   }
 }
 </script>

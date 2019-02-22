@@ -1,11 +1,14 @@
 <template>
   <div class="note">
-    <div class="note--inner" :style="{ backgroundColor: note.colour }">{{ note.note }}</div>
+    <div class="note--inner" :style="{ backgroundColor: note.colour }">
+      {{ note.content }}
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
+import store from "@/store";
 
 @Component({
   props: {
