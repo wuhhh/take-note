@@ -1,10 +1,25 @@
 <template>
-  <div class="overlay">
+  <div
+    @click.self="closeEntry()"
+    :style="{ backgroundColor: colourAlpha }"
+    class="overlay"
+  >
     <div class="note-entry">
-      <textarea></textarea>
+      <textarea :style="{ backgroundColor: colour }" v-model="note"></textarea>
       <div class="note-entry--actions">
-        <button>Do A Thing</button>
-        <button>Do Another Thing</button>
+        <div class="actions--swatches">
+          <swatches
+            colors="material-light"
+            row-length="6"
+            shapes="circles"
+            show-border
+            popover-to="right"
+            v-model="colour"
+            swatch-size="20"
+          />
+          <span>Choose A Colour</span>
+        </div>
+        <button @click="saveNote()">Save</button>
       </div>
     </div>
   </div>
@@ -12,14 +27,61 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
+import store from "@/store";
+import { mapState } from "vuex";
 
-@Component
-export default class NoteEntry extends Vue {}
+/**
+ * Swatches
+ * https://saintplay.github.io/vue-swatches/
+ */
+import Swatches from "vue-swatches";
+import "vue-swatches/dist/vue-swatches.min.css";
+
+@Component({
+  components: {
+    Swatches
+  },
+  computed: {
+    ...mapState(["notes"]),
+    colourAlpha() {
+      return this.colour + "30";
+    }
+  }
+})
+export default class NoteEntry extends Vue {
+  note: string = "";
+  colour: string = "#eeeeee";
+  id: number = 100;
+  notes: object[] = this.notes;
+
+  // Save the note to store
+  saveNote() {
+    store.dispatch("saveNote", {
+      note: this.note,
+      colour: this.colour,
+      id: this.notes.length + 1
+    });
+
+    this.closeEntry();
+    this.resetEntry();
+  }
+
+  // Close the entry modal
+  closeEntry() {
+    store.dispatch("setShowNoteEntry", false);
+  }
+
+  // Reset the entry form
+  resetEntry() {
+    this.note = "";
+  }
+}
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .overlay {
   background: rgba(0, 0, 0, 0.2);
+  transition: background-color 300ms ease;
   position: absolute;
   top: 0;
   right: 0;
@@ -41,9 +103,27 @@ export default class NoteEntry extends Vue {}
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+  box-shadow: 0 0 7px 0px rgba(0, 0, 0, 0.3);
 }
 .note-entry--actions {
   padding: 1em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  box-sizing: border-box;
+
+  .actions--swatches {
+    display: flex;
+    align-items: center;
+
+    span {
+      margin-left: 1em;
+    }
+  }
+}
+.note-entry--label {
+  padding: 0 1em;
 }
 textarea {
   background: transparent;
@@ -57,5 +137,9 @@ textarea {
   resize: none;
   width: 100%;
   height: 100%;
+  transition: background-color 300ms ease;
+}
+.actions--swatches .vue-swatches__container {
+  transform: translateY(-140%);
 }
 </style>

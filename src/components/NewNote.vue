@@ -11,7 +11,7 @@ import store from "@/store";
 @Component({
   methods: {
     showNewNote: () => {
-      store.dispatch("setLoading", true);
+      store.dispatch("setShowNoteEntry", true);
     }
   }
 })

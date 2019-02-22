@@ -25,8 +25,7 @@ export default class Notes extends Vue {}
 
 <style lang="scss" scoped>
 .notes {
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
+  column-count: 3;
+  column-gap: 0;
 }
 </style>

@@ -20,7 +20,11 @@ export default class Note extends Vue {}
 
 <style lang="scss" scoped>
 .note {
-  width: 25%;
+  width: 100%;
+  -webkit-column-break-inside: avoid; /* Chrome, Safari */
+  page-break-inside: avoid; /* Theoretically FF 20+ */
+  break-inside: avoid-column; /* IE 11 */
+  display: table; /* Actually FF 20+ */
 
   .note--inner {
     margin: 0.5em;
