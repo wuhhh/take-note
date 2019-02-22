@@ -1,17 +1,27 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
+  <div :class="{ showing_note_entry: show_note_entry }" id="app">
+    <Notes />
+    <NewNote />
+    <NoteEntry v-show="show_note_entry" />
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import HelloWorld from "./components/HelloWorld.vue";
+import Notes from "./components/Notes.vue";
+import NewNote from "./components/NewNote.vue";
+import NoteEntry from "./components/NoteEntry.vue";
+import store from "./store";
+import { mapState } from "vuex";
 
 @Component({
   components: {
-    HelloWorld
+    Notes,
+    NewNote,
+    NoteEntry
+  },
+  computed: {
+    ...mapState(["show_note_entry"])
   }
 })
 export default class App extends Vue {}
@@ -24,6 +34,6 @@ export default class App extends Vue {}
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  margin: 0.5em 0;
 }
 </style>
