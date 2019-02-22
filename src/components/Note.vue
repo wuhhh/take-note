@@ -1,5 +1,5 @@
 <template>
-  <div class="note">
+  <div @click="handleNoteClick(note.id)" class="note">
     <div class="note--inner" :style="{ backgroundColor: note.colour }">
       {{ note.content }}
     </div>
@@ -18,7 +18,13 @@ import store from "@/store";
     }
   }
 })
-export default class Note extends Vue {}
+export default class Note extends Vue {
+  handleNoteClick(id: number) {
+    store.dispatch("setEdit", true);
+    store.dispatch("setNoteToEdit", id);
+    store.dispatch("setShowNoteEntry", true);
+  }
+}
 </script>
 
 <style lang="scss" scoped>

@@ -2,7 +2,7 @@
   <div :class="{ showing_note_entry: show_note_entry }" id="app">
     <Notes />
     <NewNote />
-    <NoteEntry v-show="show_note_entry" :noteProp="noteProp" />
+    <NoteEntry v-show="show_note_entry" :note="note" />
   </div>
 </template>
 
@@ -12,31 +12,21 @@ import Notes from "./components/Notes.vue";
 import NewNote from "./components/NewNote.vue";
 import NoteEntry from "./components/NoteEntry.vue";
 import store from "./store";
-import { mapState, mapGetters } from "vuex";
+import { mapState } from "vuex";
 
 @Component({
-  data() {
-    return {
-      edit: false,
-      edit_note_id: 2
-    };
-  },
   components: {
     Notes,
     NewNote,
     NoteEntry
   },
   computed: {
-    ...mapState(["show_note_entry", "notes"]),
-    noteProp: function() {
-      if (this.$data.edit) {
-        return store.getters.getNoteByID(this.$data.edit_note_id);
+    ...mapState(["show_note_entry"]),
+    note: function() {
+      if (store.state.edit) {
+        return store.getters.getNoteByID(store.state.edit_note_id);
       } else {
-        return {
-          id: this.notes.length + 1,
-          content: "",
-          colour: "#B0BEC5"
-        };
+        return store.state.new_note;
       }
     }
   }

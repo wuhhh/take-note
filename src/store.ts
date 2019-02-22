@@ -6,7 +6,14 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    edit: <boolean>false,
+    edit_note_id: <null | number>null,
     show_note_entry: false,
+    new_note: <Note>{
+      id:0,
+      colour: "pink",
+      content: ""
+    },
     notes: <Note[]>[
       {
         id: 1,
@@ -27,8 +34,12 @@ export default new Vuex.Store({
     SAVE_NOTE(state, note: Note) {
       state.notes.push(note);
     },
-    SET_EDIT(state, val: boolean) {},
-    SET_NOTE_TO_EDIT(state, id: number) {}
+    SET_EDIT(state, val: boolean) {
+      state.edit = val;
+    },
+    SET_NOTE_TO_EDIT(state, id: number) {
+      state.edit_note_id = id;
+    }
   },
   actions: {
     setShowNoteEntry({ commit }, val: boolean) {
@@ -36,10 +47,16 @@ export default new Vuex.Store({
     },
     saveNote({ commit }, note: Note) {
       commit("SAVE_NOTE", note);
+    },
+    setEdit({ commit }, val: boolean) {
+      commit("SET_EDIT", val);
+    },
+    setNoteToEdit({ commit }, val: number) {
+      commit("SET_NOTE_TO_EDIT", val);
     }
   },
   getters: {
-    getNoteByID: state => id => {
+    getNoteByID: state => (id: number) => {
       if (state.notes.length > 0) {
         return state.notes.find(note => note.id === id);
       } else {
