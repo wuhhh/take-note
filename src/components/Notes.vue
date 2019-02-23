@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="notes">
-      <Note v-for="note in notes" :key="note.id" :note="note"/>
+      <Note v-for="note in notes" :key="note.id" :note="note" />
     </div>
   </div>
 </template>

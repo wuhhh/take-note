@@ -6,6 +6,7 @@
   >
     <div class="note-entry">
       <textarea
+        placeholder="Notes..."
         :style="{ backgroundColor: note.colour }"
         v-model="note.content"
       ></textarea>
@@ -18,7 +19,7 @@
             show-border
             popover-to="right"
             v-model="note.colour"
-            swatch-size="20"
+            swatch-size="24"
           />
           <span>Choose A Colour</span>
         </div>
@@ -29,7 +30,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Vue, Watch } from "vue-property-decorator";
 import store from "@/store";
 import { mapState } from "vuex";
 import { Note } from "@/interfaces/my-interfaces";
@@ -45,30 +46,60 @@ import "vue-swatches/dist/vue-swatches.min.css";
   components: {
     Swatches
   },
-  computed: {
-    ...mapState(["notes", "show_note_entry"])
-  },
-  props: {
-    note: {
-      type: Object,
-      required: true
-    }
-  }
+  props: ["edit_note"]
 })
 export default class NoteEntry extends Vue {
-  note: Note = this.note;
-  notes: Note[] = this.notes;
+  // Default note reference
+  defaultNote: Note = {
+    id: 0,
+    colour: "#eeeeee",
+    content: ""
+  };
+
+  // Note object for binding data
+  note: Note = {
+    id: store.state.notes.length + 1,
+    colour: this.defaultNote.colour,
+    content: this.defaultNote.content
+  };
+
+  @Watch("edit_note")
+  onEditChanged(val: number | null) {
+    if (val) this.setNote(val);
+  }
 
   // Save the note to storage
   saveNote() {
     store.dispatch("saveNote", this.note);
     this.closeEntry();
+    this.resetNote();
+  }
+
+  // Reset note data
+  resetNote() {
+    this.note = {
+      id: store.state.notes.length + 1,
+      colour: this.defaultNote.colour,
+      content: this.defaultNote.content
+    };
+  }
+
+  // Set note data from stored note
+  setNote(id: number) {
+    let savedNote = store.getters.getNoteByID(id);
+
+    this.note = {
+      id: savedNote.id,
+      colour: savedNote.colour,
+      content: savedNote.content
+    };
   }
 
   // Close the entry modal
   closeEntry() {
     store.dispatch("setShowNoteEntry", false);
-    store.dispatch("setEdit", false);
+    store.dispatch("setNoteToEdit", null);
+    this.resetNote();
   }
 }
 </script>

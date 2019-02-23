@@ -6,14 +6,8 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    edit: <boolean>false,
     edit_note_id: <null | number>null,
     show_note_entry: false,
-    new_note: <Note>{
-      id:0,
-      colour: "pink",
-      content: ""
-    },
     notes: <Note[]>[
       {
         id: 1,
@@ -31,13 +25,22 @@ export default new Vuex.Store({
     SET_SHOW_NOTE_ENTRY(state, val: boolean) {
       state.show_note_entry = val;
     },
-    SAVE_NOTE(state, note: Note) {
+    SAVE_NEW_NOTE(state, note: Note) {
       state.notes.push(note);
     },
-    SET_EDIT(state, val: boolean) {
-      state.edit = val;
+    // Payload contains <Note>note and its index
+    OVERWRITE_NOTE(state, payload: {note:Note, index:number}) {
+      let note = payload.note;
+      let index = payload.index;
+      /**
+       * Vue.set required for reactivity.
+       * See: https://vuejs.org/v2/guide/list.html#Caveats
+       * 
+       * Notes.vue will not react to state.notes[index] = note;
+       */
+      Vue.set(state.notes, index, note)
     },
-    SET_NOTE_TO_EDIT(state, id: number) {
+    SET_NOTE_TO_EDIT(state, id: number | null) {
       state.edit_note_id = id;
     }
   },
@@ -46,12 +49,24 @@ export default new Vuex.Store({
       commit("SET_SHOW_NOTE_ENTRY", val);
     },
     saveNote({ commit }, note: Note) {
-      commit("SAVE_NOTE", note);
+      // Check if note.id exists already
+      let exists = this.getters.getNoteByID(note.id);
+
+      if(exists) {
+        // Existing note's index in notes array
+        let note_index = this.getters.getNoteIndex(exists);
+        // Commit using overwrite method
+        commit({
+          type: 'OVERWRITE_NOTE',
+          note: note,
+          index: note_index
+        });
+      } else {
+        // Commit using save new method
+        commit("SAVE_NEW_NOTE", note);
+      }
     },
-    setEdit({ commit }, val: boolean) {
-      commit("SET_EDIT", val);
-    },
-    setNoteToEdit({ commit }, val: number) {
+    setNoteToEdit({ commit }, val: number | null) {
       commit("SET_NOTE_TO_EDIT", val);
     }
   },
@@ -62,6 +77,9 @@ export default new Vuex.Store({
       } else {
         return null;
       }
+    },
+    getNoteIndex: state => (note: Note) => {
+      return state.notes.findIndex(n => n.id === note.id);
     }
   }
 });

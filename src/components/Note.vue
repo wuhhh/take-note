@@ -20,7 +20,6 @@ import store from "@/store";
 })
 export default class Note extends Vue {
   handleNoteClick(id: number) {
-    store.dispatch("setEdit", true);
     store.dispatch("setNoteToEdit", id);
     store.dispatch("setShowNoteEntry", true);
   }

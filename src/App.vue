@@ -2,7 +2,7 @@
   <div :class="{ showing_note_entry: show_note_entry }" id="app">
     <Notes />
     <NewNote />
-    <NoteEntry v-show="show_note_entry" :note="note" />
+    <NoteEntry v-show="show_note_entry" :edit_note="edit_note" />
   </div>
 </template>
 
@@ -22,12 +22,8 @@ import { mapState } from "vuex";
   },
   computed: {
     ...mapState(["show_note_entry"]),
-    note: function() {
-      if (store.state.edit) {
-        return store.getters.getNoteByID(store.state.edit_note_id);
-      } else {
-        return store.state.new_note;
-      }
+    edit_note() {
+      return store.state.edit_note_id;
     }
   }
 })
