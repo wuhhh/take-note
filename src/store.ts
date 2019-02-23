@@ -11,13 +11,18 @@ export default new Vuex.Store({
     notes: <Note[]>[
       {
         id: 1,
-        content: "Hello!",
-        colour: "grey"
+        content: "Let's",
+        colour: "#ed9a9b"
       },
       {
         id: 2,
-        content: "What's up yo!",
-        colour: "green"
+        content: "Take",
+        colour: "#f290b1"
+      },
+      {
+        id: 3,
+        content: "Note!",
+        colour: "#cd95d6"
       }
     ]
   },
