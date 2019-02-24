@@ -23,7 +23,9 @@
           />
           <span>Choose A Colour</span>
         </div>
-        <button @click="saveNote">Save</button>
+        <button :disabled="hasContent" class="actions--save" @click="saveNote">
+          Save
+        </button>
       </div>
     </div>
   </div>
@@ -63,9 +65,15 @@ export default class NoteEntry extends Vue {
     content: this.defaultNote.content
   };
 
+  // Watched for edit_note prop
   @Watch("edit_note")
   onEditChanged(val: number | null) {
     if (val) this.setNote(val);
+  }
+
+  // Computed hasContent property
+  get hasContent() {
+    return this.note.content.length === 0;
   }
 
   // Save the note to storage
@@ -145,6 +153,16 @@ export default class NoteEntry extends Vue {
 
     span {
       margin-left: 1em;
+    }
+  }
+
+  .actions--save {
+    border: 0;
+    font-size: 1.1em;
+    transition: color 250ms ease;
+
+    &[disabled="disabled"] {
+      color: #a7a7a7;
     }
   }
 }
