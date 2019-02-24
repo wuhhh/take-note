@@ -157,8 +157,8 @@ textarea {
   padding: 1em;
   margin: 0;
   outline: 0;
-  font-size: 2em;
-  line-height: 1.6em;
+  font-size: 1.6em;
+  line-height: 1.4em;
   box-sizing: border-box;
   resize: none;
   width: 100%;
