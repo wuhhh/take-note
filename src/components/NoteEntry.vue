@@ -119,11 +119,11 @@ export default class NoteEntry extends Vue {
 }
 .note-entry {
   background: #fff;
-  border-radius: 3px;
+  border-radius: 6px;
   width: 100%;
   height: 100%;
   max-width: 520px;
-  max-height: 700px;
+  max-height: 610px;
   min-height: 400px;
   display: flex;
   flex-direction: column;
@@ -164,6 +164,7 @@ textarea {
   width: 100%;
   height: 100%;
   transition: background-color 300ms ease;
+  border-radius: 6px 6px 0 0;
 }
 .actions--swatches .vue-swatches__container {
   transform: translateY(-140%);
