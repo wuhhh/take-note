@@ -28,6 +28,7 @@ export default class Note extends Vue {
 
 <style lang="scss" scoped>
 .note {
+  cursor: pointer;
   width: 100%;
   -webkit-column-break-inside: avoid; /* Chrome, Safari */
   page-break-inside: avoid; /* Theoretically FF 20+ */
