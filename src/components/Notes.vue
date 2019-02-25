@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="notes">
-      <Note v-for="note in notes" :key="note.id" :note="note" />
+      <Note v-for="note in notes" :key="note.id" :note="note"/>
     </div>
   </div>
 </template>
@@ -25,8 +25,14 @@ export default class Notes extends Vue {}
 
 <style lang="scss" scoped>
 .notes {
+  /*
   transition: all 200ms ease;
   column-count: 3;
   column-gap: 0;
+  */
+  display: grid;
+  grid-gap: 0.75em;
+  grid-template-columns: repeat(auto-fill, minmax(375px, 1fr));
+  grid-auto-rows: 0;
 }
 </style>
