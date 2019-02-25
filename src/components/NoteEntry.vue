@@ -160,6 +160,7 @@ export default class NoteEntry extends Vue {
     border: 0;
     font-size: 1.1em;
     transition: color 250ms ease;
+    cursor: pointer;
 
     &[disabled="disabled"] {
       color: #a7a7a7;
