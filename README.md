@@ -1,6 +1,6 @@
 # take-note
 
-A note taking app made for fun and to test [Vue's support for Typescript](https://vuejs.org/v2/guide/typescript.html) (good, and will hopefully be even better in Vue 3.x). First use of the excellent [Vue Swatches](https://saintplay.github.io/vue-swatches/?ref=madewithvuejs.com#sub-basic) component.
+A Vue note taking app made for fun and to test [Vue's support for Typescript](https://vuejs.org/v2/guide/typescript.html) (good, and will hopefully be even better in Vue 3.x). First use of the excellent [Vue Swatches](https://saintplay.github.io/vue-swatches/?ref=madewithvuejs.com#sub-basic) component.
 
 Try a working demo at https://wuhhh-take-note.netlify.com
 
