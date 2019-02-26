@@ -19,46 +19,50 @@ import store from "@/store";
   }
 })
 export default class Note extends Vue {
+  /**
+   * Note click handler
+   */
   handleNoteClick(id: number) {
     store.dispatch("setNoteToEdit", id);
     store.dispatch("setShowNoteEntry", true);
   }
 
   /**
-   * Set grid-row-end
+   * Set grid-row-end and balance note-inner height
    */
-  setGridRowEnd() {
+  balanceGrid() {
     // .note--inner height
-    let gridGap: number = 15;
-    let height: number = (this.$el.children[0] as HTMLElement).offsetHeight;
-    console.log(height, gridGap);
-    let remainder: number = height / gridGap;
+    let note: Element = this.$el;
+    let noteInner: Element = this.$el.children[0];
+    let gridGap: number = 15; // Hard coded computed grid gap (px)
+    let height: number = (noteInner as HTMLElement).offsetHeight;
+    let heightByGrid: number = height / gridGap;
     let gridRowEnd: number = Math.ceil((height + gridGap) / gridGap);
 
-    // Set grid-row-end prop
-    (this.$el as HTMLElement).style.gridRowEnd = `span ${gridRowEnd}`;
+    // Set grid-row-end prop on .note
+    (note as HTMLElement).style.gridRowEnd = `span ${gridRowEnd}`;
 
-    // If remainder > 0, ceil the height for a perfect grid
-    if (remainder) {
-      let heightByGrid: number = height / gridGap;
-      this.$el.style.height = Math.ceil(remainder) * gridGap + "px";
-    }
+    // ceil height of .note--inner for perfect grid
+    (noteInner as HTMLElement).style.height =
+      Math.ceil(heightByGrid) * gridGap + "px";
   }
 
   mounted() {
-    this.setGridRowEnd();
+    this.balanceGrid();
   }
 }
 </script>
 
 <style lang="scss" scoped>
 .note {
+  position: relative;
   cursor: pointer;
   width: 100%;
 
   .note--inner {
     padding: 1em;
     border-radius: 3px;
+    box-sizing: border-box;
   }
 }
 </style>
