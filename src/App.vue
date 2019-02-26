@@ -31,13 +31,16 @@ export default class App extends Vue {}
 </script>
 
 <style lang="scss">
+@import "./css/reset.css";
+
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #000;
-  margin: 0.5em 0;
+  margin: 0.75em;
   font-size: 20px;
+  line-height: 1.3em;
 }
 </style>
