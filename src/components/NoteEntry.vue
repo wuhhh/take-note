@@ -23,9 +23,22 @@
           />
           <span>Choose A Colour</span>
         </div>
-        <button :disabled="hasContent" class="actions--save" @click="saveNote">
-          Save
-        </button>
+        <div class="actions--buttons">
+          <button
+            :disabled="hasContent"
+            class="actions--save"
+            @click="saveNote"
+          >
+            Save
+          </button>
+          <button
+            :disabled="!edit_note"
+            class="actions--delete"
+            @click="deleteNote"
+          >
+            Delete
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -51,6 +64,8 @@ import "vue-swatches/dist/vue-swatches.min.css";
   props: ["edit_note"]
 })
 export default class NoteEntry extends Vue {
+  edit_note: number = this.edit_note;
+
   // Default note reference
   defaultNote: Note = {
     id: 0,
@@ -60,7 +75,7 @@ export default class NoteEntry extends Vue {
 
   // Note object for binding data
   note: Note = {
-    id: store.state.notes.length + 1,
+    id: this.nextNoteID,
     colour: this.defaultNote.colour,
     content: this.defaultNote.content
   };
@@ -71,14 +86,26 @@ export default class NoteEntry extends Vue {
     if (val) this.setNote(val);
   }
 
+  // Computed next ID property
+  get nextNoteID() {
+    return store.getters.getNextID();
+  }
+
   // Computed hasContent property
   get hasContent() {
     return this.note.content.length === 0;
   }
 
-  // Save the note to storage
+  // Save button click handler - save note to storage
   saveNote() {
     store.dispatch("saveNote", this.note);
+    this.closeEntry();
+    this.resetNote();
+  }
+
+  // Delete button click handler
+  deleteNote() {
+    store.dispatch("deleteNote", this.edit_note);
     this.closeEntry();
     this.resetNote();
   }
@@ -86,7 +113,7 @@ export default class NoteEntry extends Vue {
   // Reset note data
   resetNote() {
     this.note = {
-      id: store.state.notes.length + 1,
+      id: this.nextNoteID,
       colour: this.defaultNote.colour,
       content: this.defaultNote.content
     };
@@ -116,7 +143,7 @@ export default class NoteEntry extends Vue {
 .overlay {
   background: rgba(0, 0, 0, 0.2);
   transition: background-color 300ms ease;
-  position: absolute;
+  position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
@@ -156,10 +183,14 @@ export default class NoteEntry extends Vue {
     }
   }
 
-  .actions--save {
+  .actions--buttons {
+  }
+
+  button {
     border: 0;
     font-size: 1.1em;
     transition: color 250ms ease;
+    outline: 0;
     cursor: pointer;
 
     &[disabled="disabled"] {

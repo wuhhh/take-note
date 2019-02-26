@@ -6,6 +6,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    next_note_id: 8,
     edit_note_id: <null | number>null,
     show_note_entry: false,
     notes: <Note[]>[
@@ -74,6 +75,12 @@ export default new Vuex.Store({
     },
     SET_NOTE_TO_EDIT(state, id: number | null) {
       state.edit_note_id = id;
+    },
+    DELETE_NOTE_BY_INDEX(state, id: number) {
+      Vue.delete(state.notes, id);
+    },
+    INCREMENT_NEXT_ID(state) {
+      state.next_note_id++;
     }
   },
   actions: {
@@ -97,9 +104,27 @@ export default new Vuex.Store({
         // Commit using save new method
         commit("SAVE_NEW_NOTE", note);
       }
+
+      // Increment next ID 
+      commit("INCREMENT_NEXT_ID");
     },
     setNoteToEdit({ commit }, val: number | null) {
       commit("SET_NOTE_TO_EDIT", val);
+    },
+    deleteNote({ commit }, note_id: number): boolean {
+      let exists = this.getters.getNoteByID(note_id);
+
+      if (exists) {
+        let note_index = this.getters.getNoteIndex(exists);
+        commit("DELETE_NOTE_BY_INDEX", note_index);
+        return true;
+      }
+      else {
+        throw new Error(`Couldn't find note with ID ${note_id} in notes array.`);
+      }
+    },
+    incrementNextID({ commit }) {
+      commit("INCREMENT_NEXT_ID");
     }
   },
   getters: {
@@ -112,6 +137,9 @@ export default new Vuex.Store({
     },
     getNoteIndex: state => (note: Note) => {
       return state.notes.findIndex(n => n.id === note.id);
+    },
+    getNextID: state => () => {
+      return state.next_note_id;
     }
   }
 });
